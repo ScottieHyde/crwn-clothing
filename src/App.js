@@ -34,10 +34,8 @@ class App extends React.Component {
               id: snapShot.id, // the id is not store in the data, it's stord on the snapShot object itself
               ...snapShot.data(), // we have to call .data() here to get the user data like createdAt displayName, email
             }
-          }, () => {
-            console.log(this.state)
           })
-        })
+          })
       }
       this.setState({currentUser: userAuth}); // this will be null if the userAuth doesn't exist
     }); 
