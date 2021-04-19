@@ -1,3 +1,4 @@
+import { addItemToCart } from './cart.utils';
 
 // constants
 export const TOGGLE_CART_HIDDEN = 'TOGGLE_CART_HIDDEN';
@@ -19,7 +20,6 @@ const INITIAL_STATE = {
 }
 
 const cartReducer = (state = INITIAL_STATE, action) => {
-    console.log(state)
     switch(action.type) {
         case TOGGLE_CART_HIDDEN:
             return {
@@ -29,7 +29,7 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         case ADD_ITEM:
             return {
                 ...state,
-                cartItems: [...state.cartItems, action.payload],
+                cartItems: addItemToCart(state.cartItems, action.payload),
             }
         default:
             return state;
