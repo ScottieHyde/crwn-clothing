@@ -5,6 +5,7 @@ import { ReactComponent as Logo} from '../../Assets/crown.svg';
 // the above is special syntax to tell react we want a react component that renders an SVG
 
 import { auth } from '../../firebase/firebase.utils';
+import ShoppingCartIcon from './ShoppingCartIcon/ShoppingCartIcon';
 
 import './header.styles.scss';
 
@@ -26,6 +27,7 @@ const Header = ({ currentUser }) => (
                 :
                 <Link className='option' to='/signin'>SIGN IN</Link>
             }
+            <ShoppingCartIcon/>
         </div>
     </div>
 )
