@@ -6,7 +6,7 @@ import HomePage from "./Pages/HomePage/HomePage";
 import ShopPage from "./Pages/Shop/Shop";
 import Header from './Components/Header/Header';
 import SignIn from './Components/SignInAndSignUp/SignInAndSignUp';
-import { auth } from './firebase/firebase.utils';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
 class App extends React.Component {
   constructor() {
@@ -25,9 +25,8 @@ class App extends React.Component {
     // takes a function and a user as a parameter
     // this gives us the user state on our project in firebase
     // this also helps with persistence so if the user closes the window or refreshes the page, they will be signed in still if signed in before
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user });
-      console.log(user)
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async user => {
+      createUserProfileDocument(user);
     }); 
   }
 
