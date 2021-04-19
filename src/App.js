@@ -35,8 +35,7 @@ class App extends React.Component {
               ...snapShot.data(), // we have to call .data() here to get the user data like createdAt displayName, email
             }
           })
-          console.log(this.state)
-        })
+          })
       }
       this.setState({currentUser: userAuth}); // this will be null if the userAuth doesn't exist
     }); 
