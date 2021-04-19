@@ -25,8 +25,21 @@ class App extends React.Component {
     // takes a function and a user as a parameter
     // this gives us the user state on our project in firebase
     // this also helps with persistence so if the user closes the window or refreshes the page, they will be signed in still if signed in before
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async user => {
-      createUserProfileDocument(user);
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+        userRef.onSnapshot(snapShot => {
+          this.setState({
+            currentUser: {
+              id: snapShot.id, // the id is not store in the data, it's stord on the snapShot object itself
+              ...snapShot.data(), // we have to call .data() here to get the user data like createdAt displayName, email
+            }
+          }, () => {
+            console.log(this.state)
+          })
+        })
+      }
+      this.setState({currentUser: userAuth}); // this will be null if the userAuth doesn't exist
     }); 
   }
 
