@@ -1,14 +1,14 @@
 import React from 'react';
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import './App.css';
 
 import HomePage from "./Pages/HomePage/HomePage";
 import ShopPage from "./Pages/Shop/Shop";
 import Header from './Components/Header/Header';
-import SignIn from './Components/SignInAndSignUp/SignInAndSignUp';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { setCurrentUser } from './redux/UserReducer/userReducer';
+import SignInAndSignUp from './Components/SignInAndSignUp/SignInAndSignUp';
 
 class App extends React.Component {
 
@@ -29,8 +29,8 @@ class App extends React.Component {
           setCurrentUser({
               id: snapShot.id, // the id is not store in the data, it's stord on the snapShot object itself
               ...snapShot.data(), // we have to call .data() here to get the user data like createdAt displayName, email
-            })
-          })
+            });
+          });
       }
       setCurrentUser(userAuth); // this will be null if the userAuth doesn't exist
     }); 
@@ -48,7 +48,7 @@ class App extends React.Component {
           <Switch>
              <Route exact path='/' component={HomePage}/>
              <Route path='/shop' component={ShopPage} />
-             <Route path='/signin' component={SignIn} />
+             <Route exact path='/signin' render={() => this.props.currentUser ? (<Redirect to='/'/>) : (<SignInAndSignUp/>)} />
           </Switch>
       </div>
     );
@@ -77,8 +77,12 @@ class App extends React.Component {
 //     )
 // }
 
+const mapStateToProps = ({user}) => ({
+  currentUser: user.currentUser,
+})
+
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user))
 })
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
