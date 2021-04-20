@@ -1,8 +1,19 @@
 import { addItemToCart } from './cart.utils';
+import { createSelector } from 'reselect';
 
 // constants
 export const TOGGLE_CART_HIDDEN = 'TOGGLE_CART_HIDDEN';
 export const ADD_ITEM = 'ADD_ITEM';
+
+// Selectors
+// input selector
+const selectCart = state => state.cart;
+
+export const selectCartItems = createSelector([selectCart], (cart) => cart.cartItems);
+export const selectCartItemsCount = createSelector(
+    [selectCartItems],
+    cartItems => cartItems.reduce((accu, cartItem) => accu + cartItem.quantity, 0)
+);
 
 // actions
 export const toggleCartHidden = () => ({
