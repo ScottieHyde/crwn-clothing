@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 // constants
 export const TOGGLE_CART_HIDDEN = 'TOGGLE_CART_HIDDEN';
 export const ADD_ITEM = 'ADD_ITEM';
+export const CLEAR_ITEM_FROM_CART = 'CLEAR_ITEM_FROM_CART';
 
 // Selectors
 // input selector
@@ -32,6 +33,11 @@ export const addItem = item => ({
     type: ADD_ITEM,
     payload: item,
 })
+export const clearItemFromCart = item => ({
+    type: CLEAR_ITEM_FROM_CART,
+    payload: item,
+})
+
 
 const INITIAL_STATE = {
     hidden: true,
@@ -49,6 +55,11 @@ const cartReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 cartItems: addItemToCart(state.cartItems, action.payload),
+            }
+        case CLEAR_ITEM_FROM_CART:
+            return {
+                ...state,
+                carItems: state.cartItems.filter(cartItem => cartItem.id !== action.payload.id)
             }
         default:
             return state;
