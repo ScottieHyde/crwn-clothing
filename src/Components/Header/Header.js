@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { ReactComponent as Logo} from '../../Assets/crown.svg';
 // the above is special syntax to tell react we want a react component that renders an SVG
-
+import { createStructuredSelector } from 'reselect';
 import { auth } from '../../firebase/firebase.utils';
 import ShoppingCartIcon from './ShoppingCartIcon/ShoppingCartIcon';
 import ShoppingCart from './ShoppingCartIcon/ShoppingCart/ShoppingCart';
+import { selectCartHidden } from '../../redux/CartReducer/cartReducer';
+import { selectCurrentUser } from '../../redux/UserReducer/userReducer';
 
 import './header.styles.scss';
 
@@ -34,9 +36,9 @@ const Header = ({ currentUser, hidden }) => (
     </div>
 )
 
-const mapStateToProps = ({user: { currentUser }, cart: { hidden }}) => ({
-    currentUser,
-    hidden
+const mapStateToProps = createStructuredSelector({
+    currentUser: selectCurrentUser,
+    hidden: selectCartHidden,
 })
 
 export default connect(mapStateToProps)(Header);
