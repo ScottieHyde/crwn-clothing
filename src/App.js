@@ -6,6 +6,8 @@ import './App.css';
 
 import HomePage from "./Pages/HomePage/HomePage";
 import ShopPage from "./Pages/Shop/Shop";
+import Checkout from "./Pages/Checkout/Checkout";
+
 import Header from './Components/Header/Header';
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { setCurrentUser } from './redux/UserReducer/userReducer';
@@ -50,6 +52,7 @@ class App extends React.Component {
           <Switch>
              <Route exact path='/' component={HomePage}/>
              <Route path='/shop' component={ShopPage} />
+             <Route exact path='/checkout' component={Checkout} />
              <Route exact path='/signin' render={() => this.props.currentUser ? (<Redirect to='/'/>) : (<SignInAndSignUp/>)} />
           </Switch>
       </div>
@@ -80,7 +83,7 @@ class App extends React.Component {
 // }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser(state),
+  currentUser: selectCurrentUser,
 })
 
 const mapDispatchToProps = dispatch => ({
