@@ -14,6 +14,7 @@ const ShoppingCart = ({cartItems}) => (
     </div>
 )
 
+
 const mapStateToProps = (state) => ({
     cartItems: selectCartItems(state),
 })
