@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import SHOP_DATA from './shopData';
 
 // Constants
 export const UPDATE_COLLECTIONS = 'UPDATE_COLLECTIONS';
@@ -22,18 +21,18 @@ export const selectCollections = createSelector(
 
 export const selectCollectionsForPreview = createSelector(
     [selectCollections],
-    collections => Object.keys(collections).map(key => collections[key])
+    collections => collections ? Object.keys(collections).map(key => collections[key]) : []
 )
 
 export function selectCollection(collectionUrlParam) {
     return (
-        createSelector([selectCollections], collections => collections[collectionUrlParam])
+        createSelector([selectCollections], collections =>  collections ? collections[collectionUrlParam] : null)
     )
 }
 
 // Initial State
 const INITIAL_STATE = {
-    collections: SHOP_DATA
+    collections: null
 }
 
 const shopReducer = (state = INITIAL_STATE, action) => {
