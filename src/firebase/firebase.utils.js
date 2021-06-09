@@ -24,18 +24,28 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
   // documentRef returns a documentSnapshot object and collectionRef returns a querySnapshot object
 
   const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const collectionRef = firestore.collection('users')
   const snapShot = await userRef.get()
   // the above snapShot object gives us a few details
   // exists property - tells us if there is any data for this user
   // id property - tells us the id of the same document
   // metadata property - gives us certain information like when it was created, if it is cached, if it has any pending writes
 
+  const collectionSnapshot = await collectionRef.get();
+  // this snapshot gives us an object with properties like docs/empty/size/etc
+  // inside docs it will give us snapshots in an array of the users collection
+  // empty tells us if the query is empty or not
+  // size tells us how many objects are inside the collection
+
+  // to get the data for each snapshot document - data() gives us a JSON representation of the data on these documents
+  collectionSnapshot.docs.map(doc => doc.data())
+
   if (!snapShot.exists) {
     const { displayName, email } = userAuth; // pull properties from userAuth object
     const createdAt = new Date(); // create a new date object so we know with this person was created
 
     try {
-      await userRef.set({
+      await userRef.set({ // create new user since they did not exist
         displayName,
         email,
         createdAt,
@@ -46,6 +56,33 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     }
   }
   return userRef;
+}
+
+// only used once to add the shop data to firebase
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionRef = firestore.collection(collectionKey)
+  const batch = firestore.batch() // allows us to batch all the data being set so if anything fails the whole call fails
+  objectsToAdd.forEach(obj => {
+    const newDocRef = collectionRef.doc() // tells firebase to give me a new document reference in this collection and randomly generate an id
+    batch.set(newDocRef, obj) // add the newDocRef to the batch and set it to the object
+  })
+  return await batch.commit();
+}
+
+export const convertCollectionsSnapshotToMap = (collections) => {
+  const transformedCollection = collections.docs.map(doc => {
+    const { title, items } = doc.data();
+    return {
+      routeName: encodeURI(title.toLowerCase()), //encodeURI - pass a string to it and it and it will return a new string that any URL cannot handle or process
+      id: doc.id, // the id it on the doc itself
+      title,
+      items,
+    }
+  })
+  return transformedCollection.reduce((accumulator, collection) => {
+    accumulator[collection.title.toLowerCase()] = collection; // set the object key to the title and the value to the collection
+    return accumulator
+  }, {}) // {} is the initial object
 }
 
 export const auth = firebase.auth();
