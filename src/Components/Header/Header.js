@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom'
 import { ReactComponent as Logo} from '../../Assets/crown.svg';
 // the above is special syntax to tell react we want a react component that renders an SVG
 import { createStructuredSelector } from 'reselect';
@@ -10,30 +9,30 @@ import ShoppingCart from './ShoppingCartIcon/ShoppingCart/ShoppingCart';
 import { selectCartHidden } from '../../redux/CartReducer/cartReducer';
 import { selectCurrentUser } from '../../redux/UserReducer/userReducer';
 
-import './header.styles.scss';
+import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink } from "./Header.Styles";
 
 const Header = ({ currentUser, hidden }) => (
-    <div className='header'>
-        <Link className='logo-container' to='/'>
+    <HeaderContainer>
+        <LogoContainer to='/'>
             <Logo className='logo'/>
-        </Link>
-        <div className='options'>
-            <Link className='option' to='/shop'>
+        </LogoContainer>
+        <OptionsContainer>
+            <OptionLink to='/shop'>
                 SHOP
-            </Link>
-            <Link className='option' to='/shop'>
+            </OptionLink>
+            <OptionLink to='/shop'>
                 CONTACT
-            </Link>
+            </OptionLink>
             {
                 currentUser ?
-                <div className='option' onClick={() => auth.signOut()}>SIGN OUT</div>
+                <OptionLink as='div' onClick={() => auth.signOut()}>SIGN OUT</OptionLink>
                 :
-                <Link className='option' to='/signin'>SIGN IN</Link>
+                <OptionLink to='/signin'>SIGN IN</OptionLink>
             }
             <ShoppingCartIcon/>
-        </div>
+        </OptionsContainer>
         { hidden ? null : <ShoppingCart/> }
-    </div>
+    </HeaderContainer>
 )
 
 const mapStateToProps = createStructuredSelector({
