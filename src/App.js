@@ -13,6 +13,7 @@ import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { setCurrentUser } from './redux/UserReducer/userReducer';
 import SignInAndSignUp from './Components/SignInAndSignUp/SignInAndSignUp';
 import { selectCurrentUser } from './redux/UserReducer/userReducer';
+import { selectCollectionsForPreview } from "./redux/ShopReducer/shopReducer";
 
 class App extends React.Component {
 
@@ -20,16 +21,16 @@ class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
+    const { setCurrentUser } = this.props;
+
     // this is a method on the auth library
     // takes a function and a user as a parameter
     // this gives us the user state on our project in firebase
     // this also helps with persistence so if the user closes the window or refreshes the page, they will be signed in still if signed in before
-
-    const { setCurrentUser } = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
-        userRef.onSnapshot(snapShot => {
+        userRef.onSnapshot(snapShot => { // onSnapshot is a listener for when the snapshot changes and if it does call the setCurrentUser action
           setCurrentUser({
               id: snapShot.id, // the id is not store in the data, it's stord on the snapShot object itself
               ...snapShot.data(), // we have to call .data() here to get the user data like createdAt displayName, email
@@ -37,6 +38,10 @@ class App extends React.Component {
           });
       }
       setCurrentUser(userAuth); // this will be null if the userAuth doesn't exist
+
+      // since the shop data has keys we don't care about map over it and destructure the items we do want like the title and items
+      // this was only needed to be called once to add all the data so we don't have to do it manually
+      // addCollectionAndDocuments('collections', collectionsArray.map(({title, items}) => ({ title, items })))
     }); 
   }
 
@@ -84,6 +89,7 @@ class App extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
+  collectionsArray: selectCollectionsForPreview,
 })
 
 const mapDispatchToProps = dispatch => ({
