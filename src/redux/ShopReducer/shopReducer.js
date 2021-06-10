@@ -30,7 +30,7 @@ export function fetchCollectionsFailureAction(errorMessage) {
 export const fetchCollectionStartActionAsync = () => {
     return dispatch => {
         const collectionRef = firestore.collection('collections');
-        dispatch(fetchCollectionsStartAction()) // dispatch action saying the api call started
+        dispatch(fetchCollectionsStartAction())
         collectionRef.get()
             .then(snapshot => {
                 const collectionsMap = convertCollectionsSnapshotToMap(snapshot)
@@ -63,6 +63,11 @@ export function selectCollection(collectionUrlParam) {
 export const selectIsCollectionFetching = createSelector(
     [selectShop],
     shop => shop.isFetching
+)
+
+export const selectIsCollectionsLoaded = createSelector(
+    [selectShop],
+    shop => !!shop.collections // !! converts the collections to a boolean value so we know if collections exist or not
 )
 
 // Initial State
