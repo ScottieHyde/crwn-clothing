@@ -9,6 +9,9 @@ export const CHECK_USER_SESSION = 'CHECK_USER_SESSION'
 export const SIGN_OUT_START = 'SIGN_OUT_START';
 export const SIGN_OUT_SUCCESS = 'SIGN_OUT_SUCCESS';
 export const SIGN_OUT_FAILURE = 'SIGN_OUT_FAILURE';
+export const SIGN_UP_START = 'SIGN_UP_START'
+export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS'
+export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE'
 
 
 
@@ -49,6 +52,21 @@ export const signOutFailureAction = (error) => ({
     payload: error,
 })
 
+export const signUpStartAction = userCredentials => ({
+    type: SIGN_UP_START,
+    payload: userCredentials,
+})
+
+export const signUpSuccessAction = ({ user, additionalData }) => ({
+    type: SIGN_UP_SUCCESS,
+    payload: { user, additionalData }
+})
+
+export const signUpFailureAction = error => ({
+    type: SIGN_UP_FAILURE,
+    payload: error,
+})
+
 // Selectors
 const selectUser = state => state.user;
 export const selectCurrentUser = createSelector(
@@ -78,6 +96,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
             }
         case SIGN_IN_FAILURE:
         case SIGN_OUT_FAILURE:
+        case SIGN_UP_FAILURE:
             return {
                 ...state,
                 error: action.payload
