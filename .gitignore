@@ -26,4 +26,3 @@ yarn-error.log*
 .idea
 
 /client/node_modules
-/node_modules
