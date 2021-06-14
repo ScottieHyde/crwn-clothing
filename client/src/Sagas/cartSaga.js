@@ -1,4 +1,4 @@
-import { call, takeLatest, put } from 'redux-saga/effects';
+import { takeLatest, put } from 'redux-saga/effects';
 import { clearCart } from '../redux/CartReducer/cartReducer';
 import { SIGN_OUT_SUCCESS } from '../redux/UserReducer/userReducer';
 
